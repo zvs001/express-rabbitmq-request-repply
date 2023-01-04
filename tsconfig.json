@@ -1,0 +1,31 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "compiler": "typescript"
+  },
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2016",
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "noEmit": true,
+    "noEmitOnError": false,
+    "resolveJsonModule": true,
+    "strict": true,
+    "isolatedModules": false,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@models/*": [ "models/*" ],
+      "@controllers/*": [ "controllers/*" ],
+      "@middlewares/*": [ "middlewares/*" ],
+      "@libs/*": [ "libs/*" ]
+    },
+    "outDir": "./dist"
+  },
+  "exclude": [
+    "node_modules",
+  ]
+}

@@ -1,0 +1,15 @@
+
+
+require:
+  - ./polyfill.js
+
+exit: true
+growl: true
+timeout: 10000
+
+
+node-option:
+  - 'unhandled-rejections=strict' # without leading "--", also V8 flags. Important flag. Without it mocha works unexpected
+
+file:
+  - ./test/setupDatabase.ts

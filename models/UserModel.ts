@@ -1,6 +1,10 @@
 import _ from 'lodash'
 import mongoose, { Schema, model, Document } from 'mongoose'
 
+interface PublicMethods {
+  toPublic(): Pick<User, '_id' | 'name' | 'email' | 'country' | 'city'>
+}
+
 export interface User extends Document {
   _id: string
   name: string
@@ -22,20 +26,16 @@ const UserSchema = new Schema({
 UserSchema.methods.toPublic = function assetSchemaToPublic() {
   const obj = this.toJSON()
 
-  let videos
-  if (!_.isEmpty(obj.videos)) videos = obj.videos
-
   return {
-    id: obj._id,
-    original: obj.original,
-    updatedAt: obj.updatedAt,
-    createdAt: obj.createdAt,
-    metadata: obj.metadata,
-    videos,
+    _id: obj._id,
+    name: obj.name,
+    email: obj.email,
+    country: obj.country,
+    city: obj.city,
   }
 }
 
 delete mongoose.models['User'] // babel bug
-const UserModel = model<User>('User', UserSchema)
+const UserModel = model<User & PublicMethods>('User', UserSchema)
 
 export default UserModel

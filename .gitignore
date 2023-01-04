@@ -1,0 +1,32 @@
+
+node_modules/
+.nyc_output/
+mochawesome-report/
+test.js
+config/settings.local.*
+doc/
+repos/
+packages
+.env.local
+.DS_Store
+
+### Commit specific idea files
+.idea/*
+!.idea/inspectionProfiles
+.idea/inspectionProfiles/*
+!.idea/inspectionProfiles/Project_Default.xml
+.run
+
+
+### Project specific
+.migrate
+typings/reaction-types
+kubernetes
+dump*
+data*
+
+### Generated files
+**/*.spec/interface.ts
+
+## tmp
+*.lock

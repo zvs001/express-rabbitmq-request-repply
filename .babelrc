@@ -1,0 +1,17 @@
+{
+  "extends": "@zvs001/babel-config/core",
+  "plugins": [
+    ["module-resolver", {
+       "extensions": [".js", ".ts", ".tsx"],
+       "alias": {
+         "@models": "./models/",
+         "@libs": "./libs/",
+         "@controllers": "./controllers/",
+         "@middlewares": "./middlewares/"
+       }
+    }]
+  ],
+  "ignore": [
+    "/node_modules/"
+  ]
+}

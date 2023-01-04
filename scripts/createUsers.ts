@@ -21,7 +21,7 @@ async function createUsers() {
     const user = new UserModel({
       name,
       password: uuid(),
-      email: `${uuid}@gmail.com`,
+      email: `${uuid()}@gmail.com`,
       country: countries[countryIndex],
       city: countryCities[cityIndex],
     })
