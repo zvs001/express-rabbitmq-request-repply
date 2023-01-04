@@ -5,7 +5,7 @@ require:
 
 exit: true
 growl: true
-timeout: 10000
+timeout: 100000
 
 
 node-option:

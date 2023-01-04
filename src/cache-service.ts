@@ -1,16 +1,14 @@
 import serviceStartup from 'service-startup'
 import { getChannel } from '../libs/amqpClient'
-import cacheServiceActions from './const/cacheServiceActions'
+import cacheServiceActions, { QUEUE } from './const/cacheServiceActions'
 import cache from './lib/cacheStore'
-
-const q = 'CACHE_SERVICE'
 
 async function start() {
   const channel = getChannel()
-  channel.assertQueue(q, { durable: false })
+  channel.assertQueue(QUEUE, { durable: false })
   channel.prefetch(1)
   console.log('Awaiting RPC Requests')
-  channel.consume(q, async msg => {
+  channel.consume(QUEUE, async msg => {
     const message = msg?.content?.toString()
     const data = JSON.parse(message || '')
     console.log('NEW MESSAGE:', data)
@@ -19,7 +17,7 @@ async function start() {
     let result: any
     switch (data.action) {
       case cacheServiceActions.PING: {
-        result = { pong: true}
+        result = { pong: true }
         break
       }
 
@@ -46,7 +44,6 @@ async function start() {
     }
 
     const time = Date.now() - tStart
-
 
     const str = JSON.stringify({ result, time })
     channel.sendToQueue(msg.properties.replyTo,

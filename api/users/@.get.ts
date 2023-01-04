@@ -1,8 +1,8 @@
 import express from 'express'
 import objectHash from 'object-hash'
+import cacheController from '@controllers/cacheController'
+import userApiController from '@controllers/userApiController'
 import { User } from '@models/UserModel'
-import amqpClient from '@libs/amqpClient'
-import cacheServiceActions, { QUEUE as CACHE_QUEUE } from '../../src/const/cacheServiceActions'
 import userServiceActions from '../../src/const/userServiceActions'
 
 const app = express.Router()
@@ -32,38 +32,19 @@ app.get<{}, RouteResponse, {}, RouteQuery, {}>('/', async (req, res) => {
   })
 
   // not in middleware, because we need to format params
-  const cacheResponse = await amqpClient.sendRPCMessage(CACHE_QUEUE, {
-    action: cacheServiceActions.GET,
-    params: {
-      key,
-    },
-  })
-  const cacheResult = cacheResponse?.result
+  const cacheResult = await cacheController.getCache(key)
   if (cacheResult?.exists) {
     console.log('return cached data')
     // here we handle only successful requests, but potentially we can handle errors too...
     return res.send(cacheResult.value)
   }
 
-  const response = await amqpClient.sendRPCMessage('USERS_SERVICE', {
-    action: userServiceActions.GET_LIST,
-    params: {
-      ...queryData,
-    },
-  })
-
-  const { result } = response || {}
+  const result = await userApiController.getList(queryData)
 
   res.send(result)
 
   // we don't need to wait for reply here. Added just to save time
-  await amqpClient.sendRPCMessage(CACHE_QUEUE, {
-    action: cacheServiceActions.SET,
-    params: {
-      key,
-      value: result,
-    },
-  })
+  await cacheController.saveCache({ key, value: result })
 })
 
 export default app

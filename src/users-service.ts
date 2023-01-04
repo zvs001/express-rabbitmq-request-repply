@@ -2,18 +2,16 @@ import _ from 'lodash'
 import serviceStartup from 'service-startup'
 import UserModel from '@models/UserModel'
 import { getChannel } from '../libs/amqpClient'
-import userServiceActions from './const/userServiceActions'
+import userServiceActions, { queue } from './const/userServiceActions'
 
 import '../libs/mongooseConnect'
 
-const q = 'USERS_SERVICE'
-
 async function start() {
   const channel = getChannel()
-  channel.assertQueue(q, { durable: false })
+  channel.assertQueue(queue, { durable: false })
   channel.prefetch(1)
   console.log('Awaiting RPC Requests')
-  channel.consume(q, async msg => {
+  channel.consume(queue, async msg => {
     const message = msg?.content?.toString()
     const data = JSON.parse(message || '')
     console.log('NEW MESSAGE:', data)
@@ -22,7 +20,7 @@ async function start() {
     let result: any
     switch (data.action) {
       case userServiceActions.PING: {
-        result = { pong: true}
+        result = { pong: true }
         break
       }
 
