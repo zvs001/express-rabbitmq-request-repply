@@ -39,6 +39,7 @@ app.get<{}, RouteResponse, {}, RouteQuery, {}>('/', async (req, res) => {
     return res.send(cacheResult.value)
   }
 
+  // here we use RabbitMq Request-Reply Pattern. But non-queued requests will be better alternative for it.
   const result = await userApiController.getList(queryData)
 
   res.send(result)

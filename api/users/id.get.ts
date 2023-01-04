@@ -25,6 +25,7 @@ app.get<{ user_id: string }, RouteResponse, {}, {}, {}>('/:user_id', async (req,
     return res.send(cacheResult.value)
   }
 
+  // here we use RabbitMq Request-Reply Pattern. But non-queued requests will be better alternative for it.
   const result = await userApiController.getUser(user_id)
 
   res.send(result)
